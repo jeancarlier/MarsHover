@@ -1,0 +1,86 @@
+﻿@model ICollection<MarsHoverWebApplication.Models.Hover>
+
+@{
+    ViewData["Title"] = "History";    
+}
+
+<h1>History</h1>
+
+<div>
+    <h4>Hover History</h4>
+    <hr />
+
+    <table class="table table-striped" id="historyTable" name="historyTable">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Movement Date</th>
+                <th scope="col">Start X</th>
+                <th scope="col">Start Y</th>
+                <th scope="col">Start Orientation</th>
+                <th scope="col">End X</th>
+                <th scope="col">End Y</th>
+                <th scope="col">End Orientation</th>
+                <th scope="col">Navigation Steps</th>                
+            </tr>
+        </thead>
+        
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                @for (int j = 0; j < Model.ElementAt(i).Locations.Count; j++)
+                {
+                    @if (string.IsNullOrEmpty(Model.ElementAt(i).Locations.ElementAt(j).NavigationSteps))
+                    {                        
+                        <td id="hoverId">
+                            @Html.DisplayFor(model => model.ElementAt(i).Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ElementAt(i).Locations.ElementAt(j).MovimentTime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ElementAt(i).Locations.ElementAt(j).X)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ElementAt(i).Locations.ElementAt(j).Y)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ElementAt(i).Locations.ElementAt(j).HeadingTo)
+                        </td>                        
+                    }
+                    else
+                    {                        
+                        <td>
+                            @Html.DisplayFor(model => model.ElementAt(i).Locations.ElementAt(j).X)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ElementAt(i).Locations.ElementAt(j).Y)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ElementAt(i).Locations.ElementAt(j).HeadingTo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ElementAt(i).Locations.ElementAt(j).NavigationSteps)
+                        </td>
+                    }
+                }
+                </tr>
+            }
+        </tbody>
+       
+    </table>
+
+    <script>
+
+        $('#historyTable').on('click', 'tbody tr', function (event) {
+            $(this).addClass('highlight').siblings().removeClass('highlight');
+
+            alert($(this).find("#hoverId").html().Trim());
+
+        });
+
+    </script>
+   
+</div>
+

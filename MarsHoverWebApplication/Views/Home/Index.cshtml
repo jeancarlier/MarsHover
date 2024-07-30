@@ -1,0 +1,120 @@
+﻿@{
+    ViewData["Title"] = "Mars Hover";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    
+</div>
+
+<div class="card mb-3 p-3">
+    <div class="row ml-1 ">
+        <div class="col">
+            <label class="font-weight-bold h4">Grid Size </label>
+        </div>
+    </div>
+    <div class="row ml-1">
+        <div class="col-md-2">
+            <label for="gridSizeX">Columns:</label>
+            <input class="form-control" type="number" id="gridSizeX" value="5" onchange="drawGrid()" min="2" max="50" />
+        </div>
+        <div class="col-md-2">
+            <label for="gridSizeY">Rows:</label>
+            <input class="form-control" type="number" id="gridSizeY" value="5" onchange="drawGrid()" min="2" max="50" />
+        </div>       
+    </div>
+</div>
+
+<div class="card mb-3 p-3">        
+    <div class="row" >
+        <div class="col-md-6">
+            <div class="row ml-1">
+                <div class="col">
+                    <label class="font-weight-bold h4">Add Hover</label>
+                </div>
+            </div>
+
+            <div class="row mt-3 ml-1">
+                <div class="col ">
+                    <label class="h2 font-weight-light">Initial Position</label>
+                </div>
+            </div>
+            <div class="row ml-1">
+                <div class="col-md-6">
+                    <label for="startPosX">Start at X:</label>
+                    <input class="form-control" type="number" id="startPosX" value="0" min="0" />
+                </div>
+                <div class="col-md-6">
+                    <label for="gridSizeY">Start at Y:</label>
+                    <input class="form-control" type="number" id="startPosY" value="0" min="0" />
+                </div>                    
+            </div>
+
+            <div class="row ml-1 mt-1">
+                <div class="col-md-6">
+                    <label for="startOrientation">Orientation:</label>
+                    <select class="form-control" id="startOrientation" name="startOrientation">
+                        <option value="N">North</option>
+                        <option value="S">South</option>
+                        <option value="E">East</option>
+                        <option value="W">West</option>
+                    </select>
+                </div>
+                <div class="col">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="">
+                <canvas id="canv" name="canv" class="bg-light col-md-12"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="row ml-1 mb-1 mt-5">
+        <div class="col-md-10 ">
+            <input type="button" class="btn btn-primary" id="addHover" name="addHover" value="Add Hover" onclick="addHover()">
+        </div>        
+    </div>
+    <div class="row ml-1 mt-5">
+        <div class="col-md-6">
+            <label class="h2 font-weight-light" for="">Navigation</label>
+        </div>
+        <div class="col-md-6" id="legend">
+                
+        </div>
+    </div>
+
+    <div>
+        <div class="row ml-1 mt-3">            
+            <div class="col-md-2">
+                <input class="btn btn-secondary" type="button" onclick="addNavigation('L')" value="Rotate Left" />
+            </div>
+            <div class="col-md-2">
+                <input class="btn btn-secondary" type="button" onclick="addNavigation('R')" value="Rotate Right" />
+            </div>
+            <div class="col-md-2">
+                <input class="btn btn-secondary" type="button" onclick="addNavigation('M')" value="Move Forward" />
+            </div>
+            <div class="col-md-6">            
+                <input class="form-control ml-2" type="text" id="hoverNavScript" name="hoverNavScript" readonly />
+            </div>
+        </div>  
+    </div>
+
+    <div class="row ml-1 mb-1 mt-5">
+        <div class="col-md-12 ">
+            <input class="btn btn-primary" type="button" value="Land Hover" onclick="addNavigationToHover()" />
+        </div> 
+        
+    </div>
+</div>
+
+<textarea id="navScript" name="navScript" hidden></textarea>
+<div class="row ml-1 mb-1 mt-5">
+    <div class="col-md-10 ">
+        <input class="btn btn-primary" type="submit" value="Save" onclick="navigate(true)" />
+    </div>
+    <div class="col-md-2">
+        <input class="btn btn-warning" type="button" value="Reset Navigation" onclick="resetNavigation()" />
+    </div>
+</div>
