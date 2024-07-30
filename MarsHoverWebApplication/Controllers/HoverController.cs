@@ -59,7 +59,7 @@ namespace MarsHoverWebApplication.Controllers
                     var initialPosition = inputArray[i].Split(' ');
 
                     if (initialPosition.Length != 3)
-                        throw new Exception("Invalid initial postion string for hover number " + i);
+                        throw new Exception("Invalid initial position string for hover number " + i);
 
                     Hover hover = new Hover();
                     var hoverNavigationArray = new string[] { inputArray[i], inputArray[i + 1] };

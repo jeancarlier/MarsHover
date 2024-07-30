@@ -34,24 +34,6 @@ namespace MarsHoverWebApplication.Repository
             return Save();
         }
 
-        public bool UpdateHoverNavigation(Hover hover)
-        {
-            var existentHover = _context.Hovers.Include(l => l.Locations).Where(h => h.Id == hover.Id).FirstOrDefault();
-
-            if (existentHover == null)
-            {
-                return false;
-            }
-
-            foreach (var location in hover.Locations) 
-            {
-                if (existentHover.Locations.Any(l => l.Id == location.Id) == false)
-                    _context.Add(location); 
-            }            
-
-            return Save();
-        }
-
         public bool Save()
         {
             var saved = _context.SaveChanges();

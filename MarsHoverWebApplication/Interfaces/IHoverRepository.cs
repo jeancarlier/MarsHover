@@ -7,7 +7,6 @@ namespace MarsHoverWebApplication.Interfaces
     public interface IHoverRepository
     {
         ICollection<Hover> GetHovers();
-        bool CreateHoverNavigation(Hover hover);
-        bool UpdateHoverNavigation(Hover hover);
+        bool CreateHoverNavigation(Hover hover);        
     }
 }
