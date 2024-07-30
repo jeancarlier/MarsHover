@@ -107,12 +107,11 @@ function addNavigation(direction) {
         case "L":
         case "R":
             changeDirection(lastRover, direction);
-            clearRover(lastRoverX, lastRoverY, gridSizeX.value, gridSizeY.value);
+            clearRover(lastRoverX, lastRoverY, gridSizeY.value, gridSizeX.value);
             break;        
         case "M":
             moveForward(lastRover);
-            clearRover(lastRoverX, lastRoverY, gridSizeX.value, gridSizeY.value, lastRoverOrientation);            
-            drawRoverTrack(lastRoverX, lastRoverY, gridSizeX.value, gridSizeY.value, lastRoverOrientation, lastRover.color);
+            clearRover(lastRoverX, lastRoverY, gridSizeY.value, gridSizeX.value, lastRoverOrientation);                        
             break;
     }
         
@@ -278,10 +277,7 @@ function clearRover(x, y, rows, columns, isRotation) {
     const ctx = canvas.getContext("2d");
     const width = canvas.width;
     const height = canvas.height;
-
-    let colSize = isRotation ? 20 : (width / columns);
-    let rowSize = isRotation ? 20 : (height / rows);
-
+        
     let posX = (width / columns) * x;
     let posY = (height / rows) * y;
 
@@ -291,7 +287,7 @@ function clearRover(x, y, rows, columns, isRotation) {
     let rightLegColor = "black";
     
     //Clear rect
-    ctx.clearRect(posX - 20, posY - 20, 40, 40);   
+    ctx.clearRect(posX - 10, posY - 10, 20, 20);   
     
     //Draw upper leg
     ctx.beginPath();
@@ -406,55 +402,6 @@ function drawRover(x,y,rows,columns, orientation, color, reverse, isStartPositio
         roverList.push(rover);
         roverList.sort(h => h.order);
     }
-}
-
-/**
- * Add tracking simbols on move forward
- * @param {any} x
- * @param {any} y
- * @param {any} rows
- * @param {any} columns
- * @param {any} orientation
- * @param {any} color
- */
-function drawRoverTrack(x, y, rows, columns, orientation, color) {
-
-    const canvas = document.getElementById("canv");
-    const ctx = canvas.getContext("2d");
-    const width = canvas.width;
-    const height = canvas.height;
-
-    let posX = (width / columns) * x;
-    let posY = (height / rows) * y;
-   
-    //Draw tracking arrow    
-    ctx.beginPath();
-    ctx.fillStyle = color; 
-
-    switch (orientation) {
-        case "N":
-            ctx.moveTo(posX - 5, posY);
-            ctx.lineTo(posX + 5, posY);
-            ctx.lineTo(posX + 2 / 2, posY - 10);
-            break;
-        case "S":
-            ctx.moveTo(posX - 5, posY);
-            ctx.lineTo(posX + 5, posY);
-            ctx.lineTo(posX + 2 / 2, posY + 10);
-            break;
-        case "W":
-            ctx.moveTo(posX, posY - 5);
-            ctx.lineTo(posX, posY + 5);
-            ctx.lineTo(posX + 10 * -1, posY + 2 / 2);
-            break;
-        case "E":
-            ctx.moveTo(posX, posY - 5);
-            ctx.lineTo(posX, posY + 5);
-            ctx.lineTo(posX + 10, posY + 2 / 2);
-            break;
-    }
-
-    ctx.fill();
 }
 
 /**
