@@ -1,6 +1,6 @@
-using MarsHoverWebApplication.Data;
-using MarsHoverWebApplication.Interfaces;
-using MarsHoverWebApplication.Repository;
+using MarsRoverWebApplication.Data;
+using MarsRoverWebApplication.Interfaces;
+using MarsRoverWebApplication.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MarsHoverWebApplication
+namespace MarsRoverWebApplication
 {
     public class Startup
     {
@@ -33,7 +33,7 @@ namespace MarsHoverWebApplication
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
-            services.AddScoped<IHoverRepository, HoverRepository>();
+            services.AddScoped<IRoverRepository, RoverRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

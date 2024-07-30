@@ -7,7 +7,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "MarsHoverWebApplication": {
+    "MarsRoverWebApplication": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

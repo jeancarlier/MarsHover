@@ -1,7 +1,7 @@
-﻿using MarsHoverWebApplication.Models;
+﻿using MarsRoverWebApplication.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace MarsHoverWebApplication.Data
+namespace MarsRoverWebApplication.Data
 {
     public class DataContext: DbContext
     {
@@ -10,7 +10,7 @@ namespace MarsHoverWebApplication.Data
            
         }
 
-        public DbSet<Hover> Hovers { get; set; }
+        public DbSet<Rover> Rovers { get; set; }
         public DbSet<Location> Locations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

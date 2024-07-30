@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarsHoverWebApplication.Interfaces
+namespace MarsRoverWebApplication.Interfaces
 {
     public interface ILocation
     {

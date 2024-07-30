@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MarsHoverWebApplication
+namespace MarsRoverWebApplication
 {
     public class Program
     {

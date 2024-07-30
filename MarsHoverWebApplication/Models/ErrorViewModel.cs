@@ -1,6 +1,6 @@
 using System;
 
-namespace MarsHoverWebApplication.Models
+namespace MarsRoverWebApplication.Models
 {
     public class ErrorViewModel
     {

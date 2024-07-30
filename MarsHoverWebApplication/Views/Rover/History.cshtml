@@ -1,4 +1,4 @@
-﻿@model ICollection<MarsHoverWebApplication.Models.Hover>
+﻿@model ICollection<MarsRoverWebApplication.Models.Rover>
 
 @{
     ViewData["Title"] = "History";    
@@ -7,7 +7,7 @@
 <h1>History</h1>
 
 <div>
-    <h4>Hover History</h4>
+    <h4>Rover History</h4>
     <hr />
 
     <table class="table table-striped" id="historyTable" name="historyTable">
@@ -33,7 +33,7 @@
                 {
                     @if (string.IsNullOrEmpty(Model.ElementAt(i).Locations.ElementAt(j).NavigationSteps))
                     {                        
-                        <td id="hoverId">
+                        <td id="roverId">
                             @Html.DisplayFor(model => model.ElementAt(i).Id)
                         </td>
                         <td>
@@ -76,7 +76,7 @@
         $('#historyTable').on('click', 'tbody tr', function (event) {
             $(this).addClass('highlight').siblings().removeClass('highlight');
 
-            alert($(this).find("#hoverId").html().Trim());
+            alert($(this).find("#roverId").html().Trim());
 
         });
 

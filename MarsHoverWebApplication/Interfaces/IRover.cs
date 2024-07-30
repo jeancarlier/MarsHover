@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarsHoverWebApplication.Interfaces
+namespace MarsRoverWebApplication.Interfaces
 {
-    interface IHover
+    interface IRover
     {
         string Navigate(string[] input, string[] maxGridSize);
     }

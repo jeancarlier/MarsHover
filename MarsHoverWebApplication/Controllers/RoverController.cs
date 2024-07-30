@@ -1,5 +1,5 @@
-﻿using MarsHoverWebApplication.Interfaces;
-using MarsHoverWebApplication.Models;
+﻿using MarsRoverWebApplication.Interfaces;
+using MarsRoverWebApplication.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -8,27 +8,27 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace MarsHoverWebApplication.Controllers
+namespace MarsRoverWebApplication.Controllers
 {
     [ApiController]
-    [Route("hover")]
-    public class HoverController : Controller
+    [Route("rover")]
+    public class RoverController : Controller
     {
-        private readonly IHoverRepository _hoverRepository;
-        public HoverController(IHoverRepository hoverRepository)
+        private readonly IRoverRepository _roverRepository;
+        public RoverController(IRoverRepository roverRepository)
         {
-            this._hoverRepository = hoverRepository;
+            this._roverRepository = roverRepository;
         }
 
         [HttpGet("History")]
         public IActionResult History()
         {
-            var hoverList = _hoverRepository.GetHovers();
+            var roverList = _roverRepository.GetRovers();
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return View(hoverList);
+            return View(roverList);
         }
 
 
@@ -55,17 +55,17 @@ namespace MarsHoverWebApplication.Controllers
                 //Loop through all inputs after setting grid size
                 for (int i = 1; i < inputArray.Length - 1; i++)
                 {
-                    //Get initial position for current hover
+                    //Get initial position for current rover
                     var initialPosition = inputArray[i].Split(' ');
 
                     if (initialPosition.Length != 3)
-                        throw new Exception("Invalid initial position string for hover number " + i);
+                        throw new Exception("Invalid initial position string for rover number " + i);
 
-                    Hover hover = new Hover();
-                    var hoverNavigationArray = new string[] { inputArray[i], inputArray[i + 1] };
-                    finalPosition += (string.IsNullOrEmpty(finalPosition) ? "" : " ") + hover.Navigate(hoverNavigationArray, maxGridSize);
+                    Rover rover = new Rover();
+                    var roverNavigationArray = new string[] { inputArray[i], inputArray[i + 1] };
+                    finalPosition += (string.IsNullOrEmpty(finalPosition) ? "" : " ") + rover.Navigate(roverNavigationArray, maxGridSize);
                     i++;
-                    _hoverRepository.CreateHoverNavigation(hover);                    
+                    _roverRepository.CreateRoverNavigation(rover);                    
                 }
                 
                 if (!ModelState.IsValid)

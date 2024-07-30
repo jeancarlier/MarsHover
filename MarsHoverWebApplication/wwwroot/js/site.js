@@ -1,18 +1,18 @@
-﻿var hoverList = [];
+﻿var roverList = [];
 var legendList = [];
-var hoverStatus = ""; //Possible values are: Created, LandPending, Saved
+var roverStatus = ""; //Possible values are: Created, LandPending, Saved
 
 /**
- * Add a new hover to the grid
+ * Add a new rover to the grid
  *
  */
-function addHover() {
+function addRover() {
     var navScript = document.getElementById('navScript');
     var startPosX = document.getElementById('startPosX');
     var startPosY = document.getElementById('startPosY');
     var gridSizeX = document.getElementById('gridSizeX');
     var gridSizeY = document.getElementById('gridSizeY');
-    var hoverNavScript = document.getElementById('hoverNavScript');
+    var roverNavScript = document.getElementById('roverNavScript');
     var startOrientation = document.getElementById('startOrientation');
     var old = navScript.value;
 
@@ -22,37 +22,37 @@ function addHover() {
     }
 
     if (startPosX.value == "") {
-        alert("Please set the initial position X before adding a hover!");
+        alert("Please set the initial position X before adding a rover!");
         return;
     }
 
     if (startPosY.value == "") {
-        alert("Please set the initial position Y before adding a hover!");
+        alert("Please set the initial position Y before adding a rover!");
         return;
     }
 
     if (startOrientation.value == "") {
-        alert("Please select the initial orientation before adding a hover!");
+        alert("Please select the initial orientation before adding a rover!");
         return;
     }
 
-    if (hoverStatus == "LandPending") {
-        alert("Please land the current hover before adding a new one!");
+    if (roverStatus == "LandPending") {
+        alert("Please land the current rover before adding a new one!");
         return;
     }
 
-    if (hoverStatus == "Created") {
-        alert("Please add a navigation to the current hover and land it before adding a new one!");
+    if (roverStatus == "Created") {
+        alert("Please add a navigation to the current rover and land it before adding a new one!");
         return;
     }
 
-    if (hoverStatus == "Saved") {
+    if (roverStatus == "Saved") {
         drawGrid();
         clearLegend();
-        hoverStatus = "";
+        roverStatus = "";
     }
 
-    //If it is the first hover
+    //If it is the first rover
     if (old == "") {
         old = gridSizeX.value + " " + gridSizeY.value +";"        
     }
@@ -60,143 +60,149 @@ function addHover() {
     navScript.value = old + startPosX.value + " " +
         startPosY.value + " " +
         startOrientation.value + ";" +
-        hoverNavScript.value +
-        (hoverNavScript.value != "" ? ";" : "");
+        roverNavScript.value +
+        (roverNavScript.value != "" ? ";" : "");
 
     var color = 'rgba(' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',1)';
-    drawHover(startPosX.value, startPosY.value, gridSizeY.value, gridSizeX.value, startOrientation.value, color, true);
+    drawRover(startPosX.value, startPosY.value, gridSizeY.value, gridSizeX.value, startOrientation.value, color, true, false);
    
     var legendDesc = startPosX.value + " " + startPosY.value + " " +
                         startOrientation.value + " - " +
-                        hoverNavScript.value ;
+                        roverNavScript.value ;
     addLegend(color, legendDesc);
 
     //Clear only if it has navigation defined
-    if (hoverNavScript.value != "") {
+    if (roverNavScript.value != "") {
         navigate(false);
 
         startPosX.value = "";
         startPosY.value = "";
-        hoverNavScript.value = "";
+        roverNavScript.value = "";
     } else
     {
-        hoverStatus = "Created"
+        roverStatus = "Created"
     }
             
 }
 
 /**
- * Acumulate navigations to the current hover
+ * Acumulate navigations to the current rover
  * 
  * @param {any} direction M = move forward, L = rotate to left, R = rotate to right
  */
 function addNavigation(direction) { 
-    var hoverNavScript = document.getElementById('hoverNavScript');   
+    var roverNavScript = document.getElementById('roverNavScript');   
     var gridSizeX = document.getElementById('gridSizeX');
     var gridSizeY = document.getElementById('gridSizeY');
 
-    hoverNavScript.value += direction; 
+    roverNavScript.value += direction; 
 
-    var lastHover = hoverList[hoverList.length - 1];
-    let lastHoverX = lastHover.x;
-    let lastHoverY = lastHover.y;
-    let lastHoverOrientation = lastHover.orientation;
+    var lastRover = roverList[roverList.length - 1];
+    let lastRoverX = lastRover.x;
+    let lastRoverY = lastRover.y;
+    let lastRoverOrientation = lastRover.orientation;
     
     switch (direction) {
 
         case "L":
         case "R":
-            changeDirection(lastHover, direction);
-            clearHover(lastHoverX, lastHoverY, gridSizeX.value, gridSizeY.value);
+            changeDirection(lastRover, direction);
+            clearRover(lastRoverX, lastRoverY, gridSizeX.value, gridSizeY.value);
             break;        
         case "M":
-            moveForward(lastHover);
-            clearHover(lastHoverX, lastHoverY, gridSizeX.value, gridSizeY.value, lastHoverOrientation);
+            moveForward(lastRover);
+            clearRover(lastRoverX, lastRoverY, gridSizeX.value, gridSizeY.value, lastRoverOrientation);            
+            drawRoverTrack(lastRoverX, lastRoverY, gridSizeX.value, gridSizeY.value, lastRoverOrientation, lastRover.color);
             break;
     }
         
-    drawHover(lastHover.x, lastHover.y, gridSizeY.value, gridSizeX.value, lastHover.orientation, lastHover.color, false)
+    drawRover(lastRover.x, lastRover.y, gridSizeY.value, gridSizeX.value, lastRover.orientation, lastRover.color, false, false);
 
-    hoverStatus = "LandPending"
+    //Draw the start position if it is the first movement
+    if (roverNavScript.value.length == 1 && direction == "M") {
+        drawRover(lastRoverX, lastRoverY, gridSizeY.value, gridSizeX.value, lastRoverOrientation, lastRover.color, false, true);
+    }
+    
+    roverStatus = "LandPending"
 }
 
 /**
- * Change direction of a hover using a rotation L (rotate to the left) and R (Rotate to the right)
+ * Change direction of a rover using a rotation L (rotate to the left) and R (Rotate to the right)
  * Depending on the current orientation
- * @param {any} hover 
+ * @param {any} rover 
  * @param {any} rotation
  */
-function changeDirection(hover, rotation) {
-    switch (hover.orientation) {
+function changeDirection(rover, rotation) {
+    switch (rover.orientation) {
 
         case "N":
-            rotation == "L" ? hover.orientation = "W" : hover.orientation = "E";
+            rotation == "L" ? rover.orientation = "W" : rover.orientation = "E";
             break;
         case "S":
-            rotation == "L" ? hover.orientation = "E" : hover.orientation = "W";
+            rotation == "L" ? rover.orientation = "E" : rover.orientation = "W";
             break;
         case "E":
-            rotation == "L" ? hover.orientation = "N" : hover.orientation = "S";
+            rotation == "L" ? rover.orientation = "N" : rover.orientation = "S";
             break;
         case "W":
-            rotation == "L" ? hover.orientation = "S" : hover.orientation = "N";
+            rotation == "L" ? rover.orientation = "S" : rover.orientation = "N";
             break;
 
     }
 }
 
 /**
- * Move hover forward according to it's orientation
- * @param {any} hover
+ * Move rover forward according to it's orientation
+ * @param {any} rover
  */
-function moveForward(hover) {
+function moveForward(rover) {
 
-    switch (hover.orientation) {
+    switch (rover.orientation) {
 
         case "N":
-            hover.y = parseInt(hover.y) - 1;
+            rover.y = parseInt(rover.y) - 1;
             break;
         case "S":
-            hover.y = parseInt(hover.y) + 1;
+            rover.y = parseInt(rover.y) + 1;
             break;
         case "E":
-            hover.x = parseInt(hover.x) + 1;
+            rover.x = parseInt(rover.x) + 1;
             break;
         case "W":
-            hover.x = parseInt(hover.x) - 1;
+            rover.x = parseInt(rover.x) - 1;
             break;
 
     }
 }
 
 /**
- * Attach navigation script to the current hover
+ * Attach navigation script to the current rover
  */
-function addNavigationToHover()
+function addNavigationToRover()
 {
     let navScript = document.getElementById('navScript');
-    let hoverNavScript = document.getElementById('hoverNavScript');
+    let roverNavScript = document.getElementById('roverNavScript');
     let startPosX = document.getElementById('startPosX');
     let startPosY = document.getElementById('startPosY');
 
     if (startPosX.value == "" || startPosY.value == "") {
-        alert("First you need to add a hover to be controlled!");
+        alert("First you need to add a rover to be controlled!");
         return;
     }
     
-    if (hoverNavScript.value == "") {
-        alert("Please create a navigation for the hover before landing it!");
+    if (roverNavScript.value == "") {
+        alert("Please create a navigation for the rover before landing it!");
         return;
     }
 
     navScript.value = navScript.value.substring(0, navScript.value.length - 1);
-    navScript.value += ";" + hoverNavScript.value + ";";
-    appendToLegend(hoverNavScript.value, legendList.length - 1);
+    navScript.value += ";" + roverNavScript.value + ";";
+    appendToLegend(roverNavScript.value, legendList.length - 1);
     
     startPosX.value = "";
     startPosY.value = "";
-    hoverNavScript.value = "";
-    hoverStatus = "";
+    roverNavScript.value = "";
+    roverStatus = "";
 }
 
 /**
@@ -259,14 +265,14 @@ function drawGrid()
 }
 
 /**
- * Clear last plotted hover
+ * Clear last plotted rover
  * @param {any} x
  * @param {any} y
  * @param {any} rows
  * @param {any} columns
  * @param {any} isRotation
  */
-function clearHover(x, y, rows, columns, isRotation) {
+function clearRover(x, y, rows, columns, isRotation) {
 
     const canvas = document.getElementById("canv");
     const ctx = canvas.getContext("2d");
@@ -293,7 +299,7 @@ function clearHover(x, y, rows, columns, isRotation) {
     ctx.lineWidth = 4;
     ctx.fillStyle = `rgba(255,99,71,1)`;
     ctx.moveTo(posX, posY);
-    ctx.lineTo(posX, posY - rowSize);
+    ctx.lineTo(posX, posY - 20);
     ctx.stroke();
 
     //Draw bottom leg
@@ -302,7 +308,7 @@ function clearHover(x, y, rows, columns, isRotation) {
     ctx.lineWidth = 4;
     ctx.fillStyle = `rgba(255,99,71,1)`;
     ctx.moveTo(posX, posY);
-    ctx.lineTo(posX, posY + rowSize);
+    ctx.lineTo(posX, posY + 20);
     ctx.stroke();
 
     //Draw left leg
@@ -311,7 +317,7 @@ function clearHover(x, y, rows, columns, isRotation) {
     ctx.lineWidth = 4;
     ctx.fillStyle = `rgba(255,99,71,1)`;
     ctx.moveTo(posX, posY);
-    ctx.lineTo(posX - colSize, posY);
+    ctx.lineTo(posX - 20, posY);
     ctx.stroke();
 
     //Draw right leg
@@ -320,13 +326,13 @@ function clearHover(x, y, rows, columns, isRotation) {
     ctx.lineWidth = 4;
     ctx.fillStyle = `rgba(255,99,71,1)`;
     ctx.moveTo(posX, posY);
-    ctx.lineTo(posX + colSize, posY);
+    ctx.lineTo(posX + 20, posY);
     ctx.stroke();
 
 }
 
 /**
- * Draw a hover in a defined postion in the grid
+ * Draw a rover in a defined postion in the grid
  * @param {any} x
  * @param {any} y
  * @param {any} rows
@@ -335,7 +341,7 @@ function clearHover(x, y, rows, columns, isRotation) {
  * @param {any} color
  * @param {any} reverse
  */
-function drawHover(x,y,rows,columns, orientation, color, reverse) {
+function drawRover(x,y,rows,columns, orientation, color, reverse, isStartPosition) {
 
     const canvas = document.getElementById("canv");
     const ctx = canvas.getContext("2d");
@@ -351,56 +357,108 @@ function drawHover(x,y,rows,columns, orientation, color, reverse) {
     let posX = (width / columns) * x;
     let posY = (height / rows) * y;
             
-    //Draw hover body
+    //Draw rover body
     ctx.beginPath();
     ctx.fillStyle = color;            
     ctx.ellipse(posX, posY, 10, 10, Math.PI / 4, 0, 2 * Math.PI);
             
     ctx.fill();
 
-    //Draw orientation arrow
-    ctx.beginPath();
-            
-    switch (orientation) {
-        case "N":
-            ctx.moveTo(posX - 10, posY);
-            ctx.lineTo(posX + 10, posY);
-            ctx.lineTo(posX + 2 / 2, posY - 20);
-            break;
-        case "S":
-            ctx.moveTo(posX - 10, posY);
-            ctx.lineTo(posX + 10, posY);
-            ctx.lineTo(posX + 2 / 2, posY + 20);
-            break;
-        case "W":
-            ctx.moveTo(posX, posY - 10);
-            ctx.lineTo(posX, posY + 10);
-            ctx.lineTo(posX + 20 * -1, posY + 2 / 2);
-            break;
-        case "E":
-            ctx.moveTo(posX, posY - 10);
-            ctx.lineTo(posX, posY + 10);
-            ctx.lineTo(posX + 20, posY + 2 / 2);
-            break;
+    //Draw orientation arrow only if it is the current rover
+    if (!isStartPosition) {
+        ctx.beginPath();
+
+        switch (orientation) {
+            case "N":
+                ctx.moveTo(posX - 10, posY);
+                ctx.lineTo(posX + 10, posY);
+                ctx.lineTo(posX + 2 / 2, posY - 20);
+                break;
+            case "S":
+                ctx.moveTo(posX - 10, posY);
+                ctx.lineTo(posX + 10, posY);
+                ctx.lineTo(posX + 2 / 2, posY + 20);
+                break;
+            case "W":
+                ctx.moveTo(posX, posY - 10);
+                ctx.lineTo(posX, posY + 10);
+                ctx.lineTo(posX + 20 * -1, posY + 2 / 2);
+                break;
+            case "E":
+                ctx.moveTo(posX, posY - 10);
+                ctx.lineTo(posX, posY + 10);
+                ctx.lineTo(posX + 20, posY + 2 / 2);
+                break;
+        }
+
+        ctx.fill();
+
+
+        var rover = {
+            x: x,
+            y: y,
+            orientation: orientation,
+            color: color,
+            order: legendList.length
+        };
+
+        roverList = roverList.filter(i => i.color !== color);
+        roverList.push(rover);
+        roverList.sort(h => h.order);
     }
-            
-    ctx.fill();
-
-    var hover = {
-        x: x,
-        y: y,
-        orientation: orientation,
-        color: color,
-        order: legendList.length
-    };
-
-    hoverList = hoverList.filter(i => i.color !== color);
-    hoverList.push(hover);
-    hoverList.sort(h => h.order);
 }
 
 /**
- * Clear hover legends
+ * Add tracking simbols on move forward
+ * @param {any} x
+ * @param {any} y
+ * @param {any} rows
+ * @param {any} columns
+ * @param {any} orientation
+ * @param {any} color
+ */
+function drawRoverTrack(x, y, rows, columns, orientation, color) {
+
+    const canvas = document.getElementById("canv");
+    const ctx = canvas.getContext("2d");
+    const width = canvas.width;
+    const height = canvas.height;
+
+    let posX = (width / columns) * x;
+    let posY = (height / rows) * y;
+   
+    //Draw tracking arrow    
+    ctx.beginPath();
+    ctx.fillStyle = color; 
+
+    switch (orientation) {
+        case "N":
+            ctx.moveTo(posX - 5, posY);
+            ctx.lineTo(posX + 5, posY);
+            ctx.lineTo(posX + 2 / 2, posY - 10);
+            break;
+        case "S":
+            ctx.moveTo(posX - 5, posY);
+            ctx.lineTo(posX + 5, posY);
+            ctx.lineTo(posX + 2 / 2, posY + 10);
+            break;
+        case "W":
+            ctx.moveTo(posX, posY - 5);
+            ctx.lineTo(posX, posY + 5);
+            ctx.lineTo(posX + 10 * -1, posY + 2 / 2);
+            break;
+        case "E":
+            ctx.moveTo(posX, posY - 5);
+            ctx.lineTo(posX, posY + 5);
+            ctx.lineTo(posX + 10, posY + 2 / 2);
+            break;
+    }
+
+    ctx.fill();
+}
+
+/**
+ * Clear rover legends
  */
 function clearLegend() {
     document.getElementById('legendBoxContainer').remove();
@@ -458,7 +516,7 @@ function navigate(clearFinalScript) {
 
     var input = document.getElementById('navScript');
 
-    const apiUrl = 'https://localhost:44394/hover?navScript=' + input.value;
+    const apiUrl = 'https://localhost:44394/rover?navScript=' + input.value;
     
     fetch(apiUrl, { mode: 'no-cors' })
         .then(request => {
@@ -477,7 +535,7 @@ function navigate(clearFinalScript) {
             let columns = gridSizeX.value == "" ? 5 : gridSizeX.value;
 
             let index = 0;
-            let hoverIndex = 0;
+            let roverIndex = 0;
             let x = "";
             let y = "";
 
@@ -487,12 +545,12 @@ function navigate(clearFinalScript) {
                     continue;
 
                 if (index == 2) {                                        
-                    var legendColor = document.getElementById("legendBox" + hoverIndex);
+                    var legendColor = document.getElementById("legendBox" + roverIndex);
                     var color = legendColor.style.backgroundColor;                 
-                    drawHover(x, y, rows, columns, data[i], color, true);
+                    drawRover(x, y, rows, columns, data[i], color, true, false);
                     x = "";
                     y = "";
-                    hoverIndex++;
+                    roverIndex++;
                     index = -1;
                 } else if (index == 1 && y == "") {
                     y = data[i];
@@ -506,9 +564,9 @@ function navigate(clearFinalScript) {
             if (clearFinalScript) {
                 let navScript = document.getElementById('navScript');
                 navScript.value = "";
-                hoverList = [];
+                roverList = [];
                 legendList = [];
-                hoverStatus = "Saved"
+                roverStatus = "Saved"
             }
         })
         .catch(error => {
@@ -523,18 +581,18 @@ function resetNavigation() {
     let startPosY = document.getElementById('startPosY');
     var gridSizeX = document.getElementById('gridSizeX');
     var gridSizeY = document.getElementById('gridSizeY');
-    let hoverNavScript = document.getElementById('hoverNavScript');
+    let roverNavScript = document.getElementById('roverNavScript');
     
     navScript.value = "";
     startPosX.value = "";
     startPosY.value = "";
-    hoverNavScript.value = "";
+    roverNavScript.value = "";
     gridSizeX.value = 5;
     gridSizeY.value = 5;
 
-    hoverList = [];
+    roverList = [];
     legendList = [];
-    hoverStatus = "";
+    roverStatus = "";
 
     drawGrid();
     clearLegend();

@@ -565,7 +565,7 @@
     interval: 5000,
     keyboard: true,
     slide: false,
-    pause: 'hover',
+    pause: 'rover',
     wrap: true,
     touch: true
   };
@@ -781,7 +781,7 @@
         });
       }
 
-      if (this._config.pause === 'hover') {
+      if (this._config.pause === 'rover') {
         $(this._element).on(Event$2.MOUSEENTER, function (event) {
           return _this2.pause(event);
         }).on(Event$2.MOUSELEAVE, function (event) {
@@ -825,7 +825,7 @@
 
         _this3._handleSwipe();
 
-        if (_this3._config.pause === 'hover') {
+        if (_this3._config.pause === 'rover') {
           // If it's a touch-enabled device, mouseenter/leave are fired as
           // part of the mouse compatibility events on first tap - the carousel
           // would stop cycling until user tapped out of it;
@@ -2772,7 +2772,7 @@
   var Default$4 = {
     animation: true,
     template: '<div class="tooltip" role="tooltip">' + '<div class="arrow"></div>' + '<div class="tooltip-inner"></div></div>',
-    trigger: 'hover focus',
+    trigger: 'rover focus',
     title: '',
     delay: 0,
     html: false,
@@ -2786,7 +2786,7 @@
     sanitizeFn: null,
     whiteList: DefaultWhitelist
   };
-  var HoverState = {
+  var RoverState = {
     SHOW: 'show',
     OUT: 'out'
   };
@@ -2812,7 +2812,7 @@
     ARROW: '.arrow'
   };
   var Trigger = {
-    HOVER: 'hover',
+    HOVER: 'rover',
     FOCUS: 'focus',
     CLICK: 'click',
     MANUAL: 'manual'
@@ -2839,7 +2839,7 @@
 
       this._isEnabled = true;
       this._timeout = 0;
-      this._hoverState = '';
+      this._roverState = '';
       this._activeTrigger = {};
       this._popper = null; // Protected
 
@@ -2910,7 +2910,7 @@
 
       this._isEnabled = null;
       this._timeout = null;
-      this._hoverState = null;
+      this._roverState = null;
       this._activeTrigger = null;
 
       if (this._popper !== null) {
@@ -3003,11 +3003,11 @@
             _this._fixTransition();
           }
 
-          var prevHoverState = _this._hoverState;
-          _this._hoverState = null;
+          var prevRoverState = _this._roverState;
+          _this._roverState = null;
           $(_this.element).trigger(_this.constructor.Event.SHOWN);
 
-          if (prevHoverState === HoverState.OUT) {
+          if (prevRoverState === RoverState.OUT) {
             _this._leave(null, _this);
           }
         };
@@ -3028,7 +3028,7 @@
       var hideEvent = $.Event(this.constructor.Event.HIDE);
 
       var complete = function complete() {
-        if (_this2._hoverState !== HoverState.SHOW && tip.parentNode) {
+        if (_this2._roverState !== RoverState.SHOW && tip.parentNode) {
           tip.parentNode.removeChild(tip);
         }
 
@@ -3071,7 +3071,7 @@
         complete();
       }
 
-      this._hoverState = '';
+      this._roverState = '';
     };
 
     _proto.update = function update() {
@@ -3226,13 +3226,13 @@
         context._activeTrigger[event.type === 'focusin' ? Trigger.FOCUS : Trigger.HOVER] = true;
       }
 
-      if ($(context.getTipElement()).hasClass(ClassName$6.SHOW) || context._hoverState === HoverState.SHOW) {
-        context._hoverState = HoverState.SHOW;
+      if ($(context.getTipElement()).hasClass(ClassName$6.SHOW) || context._roverState === RoverState.SHOW) {
+        context._roverState = RoverState.SHOW;
         return;
       }
 
       clearTimeout(context._timeout);
-      context._hoverState = HoverState.SHOW;
+      context._roverState = RoverState.SHOW;
 
       if (!context.config.delay || !context.config.delay.show) {
         context.show();
@@ -3240,7 +3240,7 @@
       }
 
       context._timeout = setTimeout(function () {
-        if (context._hoverState === HoverState.SHOW) {
+        if (context._roverState === RoverState.SHOW) {
           context.show();
         }
       }, context.config.delay.show);
@@ -3264,7 +3264,7 @@
       }
 
       clearTimeout(context._timeout);
-      context._hoverState = HoverState.OUT;
+      context._roverState = RoverState.OUT;
 
       if (!context.config.delay || !context.config.delay.hide) {
         context.hide();
@@ -3272,7 +3272,7 @@
       }
 
       context._timeout = setTimeout(function () {
-        if (context._hoverState === HoverState.OUT) {
+        if (context._roverState === RoverState.OUT) {
           context.hide();
         }
       }, context.config.delay.hide);

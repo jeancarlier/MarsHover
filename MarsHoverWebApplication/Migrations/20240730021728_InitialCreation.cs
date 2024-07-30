@@ -12,7 +12,7 @@ namespace MarsHoverWebApplication.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Hovers",
+                name: "Rovers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -21,7 +21,7 @@ namespace MarsHoverWebApplication.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Hovers", x => x.Id);
+                    table.PrimaryKey("PK_Rovers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -36,22 +36,22 @@ namespace MarsHoverWebApplication.Migrations
                     NavigationSteps = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MovimentTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     MaxGridSize = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    HoverId = table.Column<int>(type: "int", nullable: true)
+                    RoverId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Locations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Locations_Hovers_HoverId",
-                        column: x => x.HoverId,
-                        principalTable: "Hovers",
+                        name: "FK_Locations_Rovers_RoverId",
+                        column: x => x.RoverId,
+                        principalTable: "Rovers",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Locations_HoverId",
+                name: "IX_Locations_RoverId",
                 table: "Locations",
-                column: "HoverId");
+                column: "RoverId");
         }
 
         /// <inheritdoc />
@@ -61,7 +61,7 @@ namespace MarsHoverWebApplication.Migrations
                 name: "Locations");
 
             migrationBuilder.DropTable(
-                name: "Hovers");
+                name: "Rovers");
         }
     }
 }

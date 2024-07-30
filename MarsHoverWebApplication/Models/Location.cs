@@ -1,10 +1,10 @@
-﻿using MarsHoverWebApplication.Interfaces;
+﻿using MarsRoverWebApplication.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MarsHoverWebApplication.Models
+namespace MarsRoverWebApplication.Models
 {
     public class Location : ILocation
     {
@@ -23,7 +23,7 @@ namespace MarsHoverWebApplication.Models
             set { maxGridSize = value; }
         }
 
-        public Hover Hover { get; set; }
+        public Rover Rover { get; set; }
 
         public Location()
         {

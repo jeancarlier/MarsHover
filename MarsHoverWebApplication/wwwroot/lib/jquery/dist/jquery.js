@@ -10721,7 +10721,7 @@ jQuery.fn.extend( {
 			this.off( types, selector || "**", fn );
 	},
 
-	hover: function( fnOver, fnOut ) {
+	rover: function( fnOver, fnOut ) {
 		return this.mouseenter( fnOver ).mouseleave( fnOut || fnOver );
 	}
 } );

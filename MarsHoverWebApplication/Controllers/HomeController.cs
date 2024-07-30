@@ -1,5 +1,5 @@
-﻿using MarsHoverWebApplication.Data;
-using MarsHoverWebApplication.Models;
+﻿using MarsRoverWebApplication.Data;
+using MarsRoverWebApplication.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MarsHoverWebApplication.Controllers
+namespace MarsRoverWebApplication.Controllers
 {
     public class HomeController : Controller
     {

@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Mars Hover";
+    ViewData["Title"] = "Mars Rover";
 }
 
 <div class="text-center">
@@ -30,7 +30,7 @@
         <div class="col-md-6">
             <div class="row ml-1">
                 <div class="col">
-                    <label class="font-weight-bold h4">Add Hover</label>
+                    <label class="font-weight-bold h4">Add Rover</label>
                 </div>
             </div>
 
@@ -72,7 +72,7 @@
     </div>
     <div class="row ml-1 mb-1 mt-5">
         <div class="col-md-10 ">
-            <input type="button" class="btn btn-primary" id="addHover" name="addHover" value="Add Hover" onclick="addHover()">
+            <input type="button" class="btn btn-primary" id="addRover" name="addRover" value="Add Rover" onclick="addRover()">
         </div>        
     </div>
     <div class="row ml-1 mt-5">
@@ -96,14 +96,14 @@
                 <input class="btn btn-secondary" type="button" onclick="addNavigation('M')" value="Move Forward" />
             </div>
             <div class="col-md-6">            
-                <input class="form-control ml-2" type="text" id="hoverNavScript" name="hoverNavScript" readonly />
+                <input class="form-control ml-2" type="text" id="roverNavScript" name="roverNavScript" readonly />
             </div>
         </div>  
     </div>
 
     <div class="row ml-1 mb-1 mt-5">
         <div class="col-md-12 ">
-            <input class="btn btn-primary" type="button" value="Land Hover" onclick="addNavigationToHover()" />
+            <input class="btn btn-primary" type="button" value="Land Rover" onclick="addNavigationToRover()" />
         </div> 
         
     </div>

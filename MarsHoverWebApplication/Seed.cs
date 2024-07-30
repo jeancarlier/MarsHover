@@ -1,10 +1,10 @@
-﻿using MarsHoverWebApplication.Data;
-using MarsHoverWebApplication.Models;
+﻿using MarsRoverWebApplication.Data;
+using MarsRoverWebApplication.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MarsHoverWebApplication
+namespace MarsRoverWebApplication
 {
     public class Seed
     {
@@ -18,11 +18,11 @@ namespace MarsHoverWebApplication
         public void SeedDataContext() 
         {
             Console.WriteLine("Seeding data");
-            if (!dataContext.Hovers.Any())
+            if (!dataContext.Rovers.Any())
             {
                 Console.WriteLine("Nothing in the table!");
-                var hovers = new List<Hover>() {
-                    new Hover()
+                var rovers = new List<Rover>() {
+                    new Rover()
                     {
                         Color = "rgba(252,90,10,1)",
                         Locations = new List<Location>(){ 
@@ -44,7 +44,7 @@ namespace MarsHoverWebApplication
                             }
                         }
                     },
-                    new Hover()
+                    new Rover()
                     {
                         Color = "rgba(10,252,10,1)",
                         Locations = new List<Location>(){
@@ -67,7 +67,7 @@ namespace MarsHoverWebApplication
                         }
                     }
                 };
-                dataContext.Hovers.AddRange(hovers);
+                dataContext.Rovers.AddRange(rovers);
                 dataContext.SaveChanges();
             }
         }

@@ -1,36 +1,36 @@
-﻿using MarsHoverWebApplication.Data;
-using MarsHoverWebApplication.Interfaces;
-using MarsHoverWebApplication.Models;
+﻿using MarsRoverWebApplication.Data;
+using MarsRoverWebApplication.Interfaces;
+using MarsRoverWebApplication.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MarsHoverWebApplication.Repository
+namespace MarsRoverWebApplication.Repository
 {
-    public class HoverRepository : IHoverRepository
+    public class RoverRepository : IRoverRepository
     {
         private readonly DataContext _context;
 
-        public HoverRepository(DataContext context)
+        public RoverRepository(DataContext context)
         {
             _context = context;
         }
 
-        public ICollection<Hover> GetHovers()
+        public ICollection<Rover> GetRovers()
         {
-            return _context.Hovers.Include(c => c.Locations).OrderBy(i => i.Id).ThenBy(h => h.Locations.Min(d => d.MovimentTime)).ToList<Hover>();
+            return _context.Rovers.Include(c => c.Locations).OrderBy(i => i.Id).ThenBy(h => h.Locations.Min(d => d.MovimentTime)).ToList<Rover>();
         }
 
-        public bool CreateHoverNavigation(Hover hover)
+        public bool CreateRoverNavigation(Rover rover)
         {
-            if (hover.Color is null)
+            if (rover.Color is null)
             {
                 Random rand = new Random();
-                hover.Color = "rgba(" + rand.Next(0,255) + "," + rand.Next(0, 255) + "," + rand.Next(0, 255) + ", 1)";
+                rover.Color = "rgba(" + rand.Next(0,255) + "," + rand.Next(0, 255) + "," + rand.Next(0, 255) + ", 1)";
             }
-            _context.Add(hover);
+            _context.Add(rover);
             return Save();
         }
 
